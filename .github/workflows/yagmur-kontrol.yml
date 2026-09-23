@@ -1,0 +1,35 @@
+name: Yagmur Kontrol
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  kontrol:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Depoyu indir
+        uses: actions/checkout@v4
+
+      - name: Node.js kur
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Ozel anahtari olustur
+        run: echo "${{ secrets.WEATHERKIT_PRIVATE_KEY_B64 }}" | base64 --decode > AuthKey_QHZ8JST7GS.p8
+
+      - name: Kontrolu calistir
+        run: node yagmur-kontrol.js
+
+      - name: Sonuclari kaydet
+        run: |
+          git config user.name "yagmur-bot"
+          git config user.email "actions@github.com"
+          git add data/kayitlar.csv
+          git diff --cached --quiet || git commit -m "Otomatik kontrol"
+          git push

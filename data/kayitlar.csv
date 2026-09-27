@@ -1676,3 +1676,9 @@ zaman,sehir,tur,hedef_saat,kalan_dk,olasilik,durum
 2026-09-27T21:44:28.701Z,Antalya,rain,2026-09-27T22:00:00Z,16,0.46,bekleniyor
 2026-09-27T21:44:28.756Z,Rize,rain,2026-09-28T10:00:00Z,736,0.4,bekleniyor
 2026-09-27T21:44:28.781Z,Kadikoy,rain,2026-09-27T22:00:00Z,16,0.61,bekleniyor
+2026-09-27T21:56:39.339Z,Istanbul,rain,2026-09-27T22:00:00Z,3,0.61,bekleniyor
+2026-09-27T21:56:39.408Z,Ankara,rain,2026-09-27T22:00:00Z,3,0.46,bekleniyor
+2026-09-27T21:56:39.454Z,Izmir,,,,,beklenmiyor
+2026-09-27T21:56:39.478Z,Antalya,rain,2026-09-27T22:00:00Z,3,0.46,bekleniyor
+2026-09-27T21:56:39.499Z,Rize,rain,2026-09-28T10:00:00Z,723,0.4,bekleniyor
+2026-09-27T21:56:39.524Z,Kadikoy,rain,2026-09-27T22:00:00Z,3,0.61,bekleniyor

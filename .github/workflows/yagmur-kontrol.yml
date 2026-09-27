@@ -34,4 +34,13 @@ jobs:
           git config user.email "actions@github.com"
           git add data/kayitlar.csv data/kayitlar_dakikalik.csv data/owm-durum.json
           git diff --cached --quiet || git commit -m "Otomatik kontrol"
-          git push
+          for i in 1 2 3 4 5; do
+            if git push; then
+              echo "Push basarili."
+              break
+            fi
+            echo "Push reddedildi (baska bir calistirma once kaydetmis olabilir), guncel halini alip tekrar deniyorum... (deneme $i)"
+            git fetch origin main
+            git rebase origin/main
+            sleep 3
+          done

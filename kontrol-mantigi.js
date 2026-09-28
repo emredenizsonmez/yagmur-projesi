@@ -110,6 +110,11 @@ async function openWeatherKontrolEt(sehir, bulunan, zamanDamgasi, kalanDk) {
 
   if (dakikalar.length === 0) {
     console.warn(`[${sehir.name}] OpenWeatherMap yanitinin sekli beklenenden farkli olabilir, hicbir dakikalik kayit okunamadi. Ham yaniti data/raw-dakikalik/ klasorunde kontrol et.`);
+  } else {
+    // Hata ayiklama icin: ilk birkac dakikanin ham degerlerini logla, boylece
+    // "0mm" ciktisinin gercek bir tahmin mi yoksa bir okuma sorunu mu oldugunu
+    // Actions log'undan geriye donuk kontrol edebiliriz.
+    console.log(`[${sehir.name}] OWM ham ornek (ilk 3 dk): ${JSON.stringify(dakikalar.slice(0, 3))}`);
   }
 
   let ilkYagmurDk = null;
@@ -159,24 +164,59 @@ async function sehirIcinKontrolEt(sehir, jeton) {
   const saatler = veri.forecastHourly?.hours || [];
   const simdi = new Date();
 
+  // WeatherKit'in kendi "su anki hava durumu" verisi (dataSets=currentWeather ile
+  // zaten cekiliyordu ama simdiye kadar hic kullanilmiyordu). Bu, "60 dk icinde
+  // yagmur geliyor" tahmininden FARKLI ve daha dogrudan bir sinyal: "su an
+  // gercekten yagiyor mu" sorusuna WeatherKit'in kendi cevabi.
+  const anlik = veri.currentWeather;
+  const anlikYagisSiddeti = anlik?.precipitationIntensity || 0;
+  const anlikYagiyorMu = anlikYagisSiddeti > 0 && anlik?.conditionCode !== 'Clear' && anlik?.conditionCode !== 'MostlyClear';
+
+  // Icinde bulundugumuz saati veya gelecekteki ilk uygun saati bul.
+  // ONEMLI DUZELTME: eskiden bir saatin BASLANGICI gecince o saat tamamen
+  // atlaniyordu - yani tam o saatin ortasinda (yagmur gercekten yagarken)
+  // sistem bir sonraki saate zipliyordu ve "su an yagiyor" hic yakalanmiyordu.
+  // Simdi bir saat, BITENE kadar (baslangic + 60 dk) listede tutuluyor.
   let bulunan = null;
   for (const saat of saatler) {
     const baslangic = new Date(saat.forecastStart);
-    if (baslangic < simdi) continue;
+    const bitis = new Date(baslangic.getTime() + 60 * 60 * 1000);
+    if (bitis <= simdi) continue;
     if (saat.precipitationChance >= ayarlar.YAGMUR_ESIK_ORANI && saat.precipitationType !== 'clear') {
       bulunan = saat;
       break;
     }
   }
 
+  if (anlikYagiyorMu) {
+    const turAdi = TURKCE_TUR[bulunan?.precipitationType] || anlik.conditionCode || 'yagis';
+    console.log(`[${sehir.name}] SU AN YAGIS VAR (WeatherKit anlik veri): ${turAdi}, siddet=${anlikYagisSiddeti}mm/sa, conditionCode=${anlik.conditionCode}`);
+    fs.appendFileSync(
+      CSV_DOSYASI,
+      `${zamanDamgasi},${sehir.name},${bulunan?.precipitationType || anlik.conditionCode},${zamanDamgasi},0,${bulunan?.precipitationChance ?? 1},YAGIYOR-SIMDI\n`
+    );
+    // Dedup icin bu saatin basini (ornek: 20:00, 21:00) kullaniyoruz, boylece
+    // ayni saat icinde tekrar tekrar OpenWeatherMap'e gidilmiyor ama saat
+    // degisince (yagmur devam ediyorsa) taze bir dakikalik veri aliniyor.
+    const saatBasi = new Date(simdi);
+    saatBasi.setUTCMinutes(0, 0, 0);
+    try {
+      await openWeatherKontrolEt(sehir, { forecastStart: saatBasi.toISOString() }, zamanDamgasi, 0);
+    } catch (err) {
+      console.error(`[${sehir.name}] OpenWeatherMap kontrolu sirasinda beklenmeyen hata:`, err.message);
+    }
+  }
+
   if (!bulunan) {
-    console.log(`[${sehir.name}] Onumuzdeki saatlerde yagis beklenmiyor.`);
-    fs.appendFileSync(CSV_DOSYASI, `${zamanDamgasi},${sehir.name},,,,,beklenmiyor\n`);
+    if (!anlikYagiyorMu) {
+      console.log(`[${sehir.name}] Onumuzdeki saatlerde yagis beklenmiyor.`);
+      fs.appendFileSync(CSV_DOSYASI, `${zamanDamgasi},${sehir.name},,,,,beklenmiyor\n`);
+    }
     return;
   }
 
   const hedefZaman = new Date(bulunan.forecastStart);
-  const kalanDk = Math.round((hedefZaman - simdi) / 60000);
+  const kalanDk = Math.max(0, Math.round((hedefZaman - simdi) / 60000));
   const saatStr = Math.floor(kalanDk / 60);
   const dakikaStr = kalanDk % 60;
   const turAdi = TURKCE_TUR[bulunan.precipitationType] || bulunan.precipitationType;
@@ -188,7 +228,7 @@ async function sehirIcinKontrolEt(sehir, jeton) {
     `${zamanDamgasi},${sehir.name},${bulunan.precipitationType},${bulunan.forecastStart},${kalanDk},${bulunan.precipitationChance},bekleniyor\n`
   );
 
-  if (kalanDk <= ayarlar.OPENWEATHER_YAKINLASMA_ESIK_DK) {
+  if (kalanDk <= ayarlar.OPENWEATHER_YAKINLASMA_ESIK_DK && !anlikYagiyorMu) {
     try {
       await openWeatherKontrolEt(sehir, bulunan, zamanDamgasi, kalanDk);
     } catch (err) {

@@ -4625,3 +4625,12 @@ zaman,sehir,tur,hedef_saat,kalan_dk,olasilik,durum
 2026-10-03T05:42:17.011Z,Rize,rain,2026-10-03T05:00:00Z,0,0.4,bekleniyor
 2026-10-03T05:42:17.048Z,Kadikoy,,,,,beklenmiyor
 2026-10-03T05:42:17.125Z,Sultangazi,,,,,beklenmiyor
+2026-10-03T06:04:02.676Z,Istanbul,,,,,beklenmiyor
+2026-10-03T06:04:02.706Z,Ankara,,,,,beklenmiyor
+2026-10-03T06:04:02.747Z,Izmir,,,,,beklenmiyor
+2026-10-03T06:04:02.778Z,Antalya,rain,2026-10-03T06:04:02.778Z,0,0.3,YAGIYOR-SIMDI
+2026-10-03T06:04:02.778Z,Antalya,rain,2026-10-03T20:00:00Z,836,0.3,bekleniyor
+2026-10-03T06:04:02.980Z,Rize,rain,2026-10-03T06:04:02.980Z,0,0.35,YAGIYOR-SIMDI
+2026-10-03T06:04:02.980Z,Rize,rain,2026-10-03T06:00:00Z,0,0.35,bekleniyor
+2026-10-03T06:04:03.125Z,Kadikoy,,,,,beklenmiyor
+2026-10-03T06:04:03.156Z,Sultangazi,,,,,beklenmiyor

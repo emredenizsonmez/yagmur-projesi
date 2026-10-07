@@ -5945,3 +5945,10 @@ zaman,sehir,tur,hedef_saat,kalan_dk,olasilik,durum
 2026-10-07T21:57:41.017Z,Rize,rain,2026-10-08T15:00:00Z,1022,0.45,bekleniyor
 2026-10-07T21:57:41.050Z,Kadikoy,,,,,beklenmiyor
 2026-10-07T21:57:41.085Z,Sultangazi,,,,,beklenmiyor
+2026-10-07T22:17:06.062Z,Istanbul,,,,,HATA-429
+2026-10-07T22:17:06.215Z,Ankara,,,,,HATA-429
+2026-10-07T22:17:06.328Z,Izmir,,,,,HATA-429
+2026-10-07T22:17:06.389Z,Antalya,,,,,HATA-429
+2026-10-07T22:17:06.437Z,Rize,,,,,HATA-429
+2026-10-07T22:17:06.491Z,Kadikoy,,,,,HATA-429
+2026-10-07T22:17:06.534Z,Sultangazi,,,,,HATA-429

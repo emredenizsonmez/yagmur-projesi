@@ -12359,3 +12359,12 @@ zaman,sehir,tur,hedef_saat,kalan_dk,olasilik,durum
 2026-10-31T15:58:33.890Z,Rize,,,,,beklenmiyor
 2026-10-31T15:58:33.922Z,Kadikoy,,,,,beklenmiyor
 2026-10-31T15:58:33.984Z,Sultangazi,,,,,beklenmiyor
+2026-10-31T19:53:02.682Z,Istanbul,,,,,beklenmiyor
+2026-10-31T19:53:02.750Z,Ankara,,,,,beklenmiyor
+2026-10-31T19:53:02.844Z,Izmir,rain,2026-10-31T19:53:02.844Z,0,0.32,YAGIYOR-SIMDI
+2026-10-31T19:53:02.844Z,Izmir,rain,2026-10-31T20:00:00Z,7,0.32,bekleniyor
+2026-10-31T19:53:03.043Z,Antalya,rain,2026-10-31T19:53:03.043Z,0,0.37,YAGIYOR-SIMDI
+2026-10-31T19:53:03.043Z,Antalya,rain,2026-10-31T19:00:00Z,0,0.37,bekleniyor
+2026-10-31T19:53:03.200Z,Rize,,,,,beklenmiyor
+2026-10-31T19:53:03.262Z,Kadikoy,,,,,beklenmiyor
+2026-10-31T19:53:03.322Z,Sultangazi,rain,2026-11-01T19:00:00Z,1387,0.3,bekleniyor
